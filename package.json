@@ -1,14 +1,18 @@
 {
-  "name": "shift-launcher",
-  "productName": "Shift Launcher",
+  "name": "kivra-launcher",
+  "productName": "Kivra Launcher",
   "version": "0.1.0",
-  "description": "Лёгкий лаунчер Minecraft без рекламы и телеметрии: моды из Modrinth и CurseForge",
+  "description": "Лёгкий лаунчер Minecraft без рекламы и телеметрии: моды из Modrinth и CurseForge, P2P-друзья, звонки, видео и ИИ",
   "main": "src/main/main.js",
   "private": true,
   "scripts": {
     "start": "node scripts/copy-font.js && electron .",
     "test": "node test/run.js && node test/ui-smoke.js",
-    "dist": "node scripts/copy-font.js && electron-builder"
+    "dist": "node scripts/copy-font.js && electron-builder",
+    "dist:win": "node scripts/copy-font.js && electron-builder --win",
+    "dist:linux": "node scripts/copy-font.js && electron-builder --linux AppImage deb tar.gz zip",
+    "dist:linux-zip": "node scripts/copy-font.js && electron-builder --linux zip",
+    "dist:mac": "node scripts/copy-font.js && electron-builder --mac dmg zip"
   },
   "devDependencies": {
     "electron": "^33.2.0",
@@ -16,8 +20,8 @@
     "@fontsource-variable/inter": "^5.1.0"
   },
   "build": {
-    "appId": "local.cubic.launcher",
-    "productName": "Shift Launcher",
+    "appId": "local.kivra.launcher",
+    "productName": "Kivra Launcher",
     "directories": {
       "output": "dist"
     },
@@ -45,16 +49,32 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "ShiftLauncher-Setup-${version}.${ext}"
+      "artifactName": "KivraLauncher-Setup-${version}.${ext}",
+      "multiLanguageInstaller": true,
+      "displayLanguageSelector": true,
+      "perMachine": true
     },
     "portable": {
-      "artifactName": "ShiftLauncher-Portable-${version}.${ext}"
+      "artifactName": "KivraLauncher-Portable-${version}.${ext}"
     },
     "linux": {
-      "target": "AppImage"
+      "target": [
+        { "target": "zip", "arch": ["x64"] },
+        { "target": "AppImage", "arch": ["x64"] },
+        { "target": "deb", "arch": ["x64"] },
+        { "target": "tar.gz", "arch": ["x64"] }
+      ],
+      "category": "Game",
+      "executableName": "kivra-launcher",
+      "artifactName": "KivraLauncher-Linux-${version}-${arch}.${ext}"
     },
     "mac": {
-      "target": "dmg"
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "category": "public.app-category.games",
+      "artifactName": "KivraLauncher-macOS-${version}-${arch}.${ext}"
     }
   }
 }
